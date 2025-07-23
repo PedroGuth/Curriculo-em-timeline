@@ -8,9 +8,9 @@ export interface TimelineItem {
 }
 
 export const tipoOptions = [
-  { value: 'trabalho', label: 'Trabalho', color: 'blue' },
-  { value: 'educacao', label: 'Educação', color: 'purple' },
-  { value: 'projeto', label: 'Projeto', color: 'green' },
+  { value: 'educacao', label: 'Formação Acadêmica', color: 'purple' },
+  { value: 'trabalho', label: 'Experiência Profissional', color: 'blue' },
   { value: 'certificacao', label: 'Certificação', color: 'yellow' },
+  { value: 'projeto', label: 'Realização Profissional', color: 'green' },
   { value: 'outro', label: 'Outro', color: 'gray' },
 ] as const;

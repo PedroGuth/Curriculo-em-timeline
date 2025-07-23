@@ -81,11 +81,41 @@
                 0 0 20px hsl(142, 76%, 36% / 0.1);
   }
 
-  .type-trabalho { @apply border-l-4 border-l-blue-500; }
-  .type-educacao { @apply border-l-4 border-l-purple-500; }
-  .type-projeto { @apply border-l-4 border-l-green-500; }
-  .type-certificacao { @apply border-l-4 border-l-yellow-500; }
-  .type-outro { @apply border-l-4 border-l-gray-500; }
+  /* Cores específicas para cada tipo */
+  .type-educacao { 
+    @apply border-l-4 border-l-purple-500; 
+    background: linear-gradient(135deg, 
+      hsl(270, 50%, 12% / 0.9) 0%, 
+      hsl(270, 30%, 15% / 0.9) 100%);
+  }
+  
+  .type-trabalho { 
+    @apply border-l-4 border-l-blue-500; 
+    background: linear-gradient(135deg, 
+      hsl(220, 50%, 12% / 0.9) 0%, 
+      hsl(220, 30%, 15% / 0.9) 100%);
+  }
+  
+  .type-certificacao { 
+    @apply border-l-4 border-l-yellow-500; 
+    background: linear-gradient(135deg, 
+      hsl(45, 50%, 12% / 0.9) 0%, 
+      hsl(45, 30%, 15% / 0.9) 100%);
+  }
+  
+  .type-projeto { 
+    @apply border-l-4 border-l-green-500; 
+    background: linear-gradient(135deg, 
+      hsl(120, 50%, 12% / 0.9) 0%, 
+      hsl(120, 30%, 15% / 0.9) 100%);
+  }
+  
+  .type-outro { 
+    @apply border-l-4 border-l-gray-500; 
+    background: linear-gradient(135deg, 
+      hsl(0, 0%, 12% / 0.9) 0%, 
+      hsl(0, 0%, 15% / 0.9) 100%);
+  }
 
   .line-clamp-3 {
     display: -webkit-box;
