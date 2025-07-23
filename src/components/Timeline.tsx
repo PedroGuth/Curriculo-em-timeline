@@ -66,8 +66,8 @@ const Timeline: React.FC<TimelineProps> = ({ items, onDeleteItem }) => {
             </Button>
             
             <div className="grid grid-cols-2 gap-4">
-              {/* Coluna 1: Data, Tipo */}
-              <div className="space-y-2">
+              {/* Coluna 1: Data e Tipo */}
+              <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <Calendar className="w-3 h-3 text-primary" />
                   <span className="text-xs text-muted-foreground font-mono">
@@ -82,25 +82,16 @@ const Timeline: React.FC<TimelineProps> = ({ items, onDeleteItem }) => {
                 </div>
               </div>
               
-              {/* Coluna 2: Espaço adicional para layout */}
-              <div>
-                {/* Espaço reservado para equilíbrio visual */}
+              {/* Coluna 2: Título e Observações */}
+              <div className="space-y-1">
+                <h3 className="text-sm font-bold text-foreground leading-tight">{item.item}</h3>
+                {item.observacoes && (
+                  <p className="text-muted-foreground text-xs leading-relaxed">
+                    {item.observacoes}
+                  </p>
+                )}
               </div>
             </div>
-            
-            {/* Título ocupando toda a largura */}
-            <div className="mt-3">
-              <h3 className="text-sm font-bold text-foreground leading-tight">{item.item}</h3>
-            </div>
-            
-            {/* Observações ocupando toda a largura */}
-            {item.observacoes && (
-              <div className="mt-2">
-                <p className="text-muted-foreground text-xs leading-relaxed">
-                  {item.observacoes}
-                </p>
-              </div>
-            )}
           </div>
         </div>
       ))}
