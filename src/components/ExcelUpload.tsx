@@ -1,4 +1,3 @@
-
 import React, { useRef } from 'react';
 import { Upload, FileSpreadsheet } from 'lucide-react';
 import * as XLSX from 'xlsx';
@@ -97,7 +96,6 @@ const ExcelUpload: React.FC<ExcelUploadProps> = ({ onDataImport }) => {
 
     reader.readAsArrayBuffer(file);
     
-    // Limpar o input para permitir upload do mesmo arquivo novamente
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -108,7 +106,7 @@ const ExcelUpload: React.FC<ExcelUploadProps> = ({ onDataImport }) => {
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <>
       <input
         ref={fileInputRef}
         type="file"
@@ -118,18 +116,12 @@ const ExcelUpload: React.FC<ExcelUploadProps> = ({ onDataImport }) => {
       />
       <Button
         onClick={triggerFileInput}
-        variant="outline"
-        size="sm"
-        className="flex items-center gap-2"
+        className="h-12 w-12 rounded-full bg-secondary hover:bg-secondary/90 shadow-lg"
+        size="icon"
       >
-        <Upload className="w-4 h-4" />
-        Importar Excel
+        <Upload className="w-5 h-5" />
       </Button>
-      <div className="text-xs text-muted-foreground">
-        <FileSpreadsheet className="w-3 h-3 inline mr-1" />
-        .xlsx ou .xls
-      </div>
-    </div>
+    </>
   );
 };
 

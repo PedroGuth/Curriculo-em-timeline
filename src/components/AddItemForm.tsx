@@ -6,14 +6,17 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Plus, Calendar, FileText, Tag, MessageSquare } from 'lucide-react';
+import { Plus, Calendar, FileText, Tag, MessageSquare, Upload } from 'lucide-react';
+import ExcelUpload from './ExcelUpload';
 
 interface AddItemFormProps {
   onAddItem: (item: Omit<TimelineItem, 'id'>) => void;
+  onDataImport: (items: TimelineItem[]) => void;
 }
 
-const AddItemForm: React.FC<AddItemFormProps> = ({ onAddItem }) => {
+const AddItemForm: React.FC<AddItemFormProps> = ({ onAddItem, onDataImport }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showHoverOptions, setShowHoverOptions] = useState(false);
   const [formData, setFormData] = useState({
     data: '',
     item: '',
@@ -30,12 +33,57 @@ const AddItemForm: React.FC<AddItemFormProps> = ({ onAddItem }) => {
     }
   };
 
-  if (!isOpen) {
+  const handlePlusClick = () => {
+    if (showHoverOptions) {
+      setShowHoverOptions(false);
+    } else {
+      setShowHoverOptions(true);
+    }
+  };
+
+  if (!isOpen && !showHoverOptions) {
     return (
       <div className="fixed bottom-8 right-8 z-50">
         <Button
-          onClick={() => setIsOpen(true)}
+          onClick={handlePlusClick}
           className="h-16 w-16 rounded-full bg-primary hover:bg-primary/90 shadow-2xl"
+          size="icon"
+        >
+          <Plus className="w-8 h-8" />
+        </Button>
+      </div>
+    );
+  }
+
+  if (showHoverOptions) {
+    return (
+      <div className="fixed bottom-8 right-8 z-50">
+        <div className="flex flex-col items-end gap-3 mb-4">
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-muted-foreground bg-background/90 px-3 py-1 rounded-lg shadow-sm">
+              Importar Excel
+            </span>
+            <ExcelUpload onDataImport={onDataImport} />
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-muted-foreground bg-background/90 px-3 py-1 rounded-lg shadow-sm">
+              Adicionar Item
+            </span>
+            <Button
+              onClick={() => {
+                setShowHoverOptions(false);
+                setIsOpen(true);
+              }}
+              className="h-12 w-12 rounded-full bg-secondary hover:bg-secondary/90 shadow-lg"
+              size="icon"
+            >
+              <FileText className="w-5 h-5" />
+            </Button>
+          </div>
+        </div>
+        <Button
+          onClick={handlePlusClick}
+          className="h-16 w-16 rounded-full bg-primary hover:bg-primary/90 shadow-2xl rotate-45"
           size="icon"
         >
           <Plus className="w-8 h-8" />

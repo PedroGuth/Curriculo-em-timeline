@@ -1,13 +1,14 @@
-
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Timeline from '../components/Timeline';
 import AddItemForm from '../components/AddItemForm';
 import { TimelineItem } from '../types/timeline';
 import { Toaster } from '../components/ui/toaster';
+import { useToast } from '../components/ui/use-toast';
 
 const Index = () => {
   const [timelineItems, setTimelineItems] = useState<TimelineItem[]>([]);
+  const { toast } = useToast();
 
   // Dados iniciais de exemplo
   useEffect(() => {
@@ -52,6 +53,14 @@ const Index = () => {
     setTimelineItems(prev => [item, ...prev]);
   };
 
+  const handleDeleteItem = (id: string) => {
+    setTimelineItems(prev => prev.filter(item => item.id !== id));
+    toast({
+      title: "Item removido",
+      description: "O item foi removido do timeline com sucesso.",
+    });
+  };
+
   const handleDataImport = (importedItems: TimelineItem[]) => {
     setTimelineItems(prev => [...importedItems, ...prev]);
   };
@@ -59,11 +68,11 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       <div className="container mx-auto px-4">
-        <Header onDataImport={handleDataImport} />
+        <Header />
         
         <main className="pb-20">
           {timelineItems.length > 0 ? (
-            <Timeline items={timelineItems} />
+            <Timeline items={timelineItems} onDeleteItem={handleDeleteItem} />
           ) : (
             <div className="text-center py-20">
               <div className="text-6xl mb-4">📝</div>
@@ -76,7 +85,7 @@ const Index = () => {
         </main>
       </div>
       
-      <AddItemForm onAddItem={handleAddItem} />
+      <AddItemForm onAddItem={handleAddItem} onDataImport={handleDataImport} />
       <Toaster />
     </div>
   );

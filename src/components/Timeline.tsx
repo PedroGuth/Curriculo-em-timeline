@@ -1,13 +1,15 @@
 
 import React, { useEffect, useRef } from 'react';
 import { TimelineItem } from '../types/timeline';
-import { Calendar, Briefcase, GraduationCap, Code, Award, Star } from 'lucide-react';
+import { Calendar, Briefcase, GraduationCap, Code, Award, Star, Trash2 } from 'lucide-react';
+import { Button } from './ui/button';
 
 interface TimelineProps {
   items: TimelineItem[];
+  onDeleteItem: (id: string) => void;
 }
 
-const Timeline: React.FC<TimelineProps> = ({ items }) => {
+const Timeline: React.FC<TimelineProps> = ({ items, onDeleteItem }) => {
   const timelineRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -46,14 +48,23 @@ const Timeline: React.FC<TimelineProps> = ({ items }) => {
       <div className="absolute left-1/2 transform -translate-x-1/2 w-1 timeline-line h-full"></div>
       
       {sortedItems.map((item, index) => (
-        <div key={item.id} className={`timeline-item relative mb-8 ${index % 2 === 0 ? 'pr-8 text-right' : 'pl-8 text-left'}`}>
+        <div key={item.id} className={`timeline-item relative mb-6 ${index % 2 === 0 ? 'pr-8 text-right' : 'pl-8 text-left'}`}>
           {/* Dot do timeline */}
-          <div className={`absolute top-4 ${index % 2 === 0 ? 'right-0' : 'left-0'} transform ${index % 2 === 0 ? 'translate-x-1/2' : '-translate-x-1/2'} timeline-dot flex items-center justify-center text-primary`}>
+          <div className={`absolute top-3 ${index % 2 === 0 ? 'right-0' : 'left-0'} transform ${index % 2 === 0 ? 'translate-x-1/2' : '-translate-x-1/2'} timeline-dot flex items-center justify-center text-primary`}>
             {getIcon(item.tipo)}
           </div>
           
           {/* Card do item */}
-          <div className={`timeline-card ${index % 2 === 0 ? 'mr-8' : 'ml-8'} type-${item.tipo}`}>
+          <div className={`timeline-card group relative ${index % 2 === 0 ? 'mr-8' : 'ml-8'} type-${item.tipo}`}>
+            <Button
+              variant="ghost"
+              size="icon"
+              className={`absolute top-2 ${index % 2 === 0 ? 'left-2' : 'right-2'} h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity bg-destructive/10 hover:bg-destructive/20 text-destructive`}
+              onClick={() => onDeleteItem(item.id)}
+            >
+              <Trash2 className="w-3 h-3" />
+            </Button>
+            
             <div className="flex items-center gap-2 mb-2">
               <Calendar className="w-3 h-3 text-primary" />
               <span className="text-xs text-muted-foreground font-mono">
@@ -61,7 +72,7 @@ const Timeline: React.FC<TimelineProps> = ({ items }) => {
               </span>
             </div>
             
-            <h3 className="text-lg font-bold mb-2 text-foreground leading-tight">{item.item}</h3>
+            <h3 className="text-base font-bold mb-2 text-foreground leading-tight">{item.item}</h3>
             
             <div className="flex items-center gap-2 mb-2">
               {getIcon(item.tipo)}
@@ -71,7 +82,7 @@ const Timeline: React.FC<TimelineProps> = ({ items }) => {
             </div>
             
             {item.observacoes && (
-              <p className="text-muted-foreground text-xs leading-relaxed line-clamp-3">
+              <p className="text-muted-foreground text-xs leading-relaxed line-clamp-2">
                 {item.observacoes}
               </p>
             )}

@@ -1,14 +1,8 @@
 
 import React from 'react';
-import { Calendar, Plus } from 'lucide-react';
-import ExcelUpload from './ExcelUpload';
-import { TimelineItem } from '../types/timeline';
+import { Calendar } from 'lucide-react';
 
-interface HeaderProps {
-  onDataImport?: (items: TimelineItem[]) => void;
-}
-
-const Header: React.FC<HeaderProps> = ({ onDataImport }) => {
+const Header: React.FC = () => {
   return (
     <header className="text-center py-12 mb-8">
       <div className="flex items-center justify-center gap-3 mb-4">
@@ -21,12 +15,6 @@ const Header: React.FC<HeaderProps> = ({ onDataImport }) => {
       <p className="text-muted-foreground text-lg mb-6 max-w-2xl mx-auto">
         Organize sua trajetória profissional de forma visual e interativa
       </p>
-
-      {onDataImport && (
-        <div className="flex justify-center">
-          <ExcelUpload onDataImport={onDataImport} />
-        </div>
-      )}
     </header>
   );
 };
