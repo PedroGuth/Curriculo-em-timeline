@@ -81,40 +81,71 @@
                 0 0 20px hsl(142, 76%, 36% / 0.1);
   }
 
-  /* Cores específicas para cada tipo */
-  .type-educacao { 
-    @apply border-l-4 border-l-purple-500; 
+  /* Cores específicas para cada tipo - sutis */
+  .timeline-card.type-educacao { 
+    @apply border-l-4 border-l-purple-400/60; 
     background: linear-gradient(135deg, 
-      hsl(270, 50%, 12% / 0.9) 0%, 
-      hsl(270, 30%, 15% / 0.9) 100%);
+      hsl(270, 40%, 12% / 0.85) 0%, 
+      hsl(270, 25%, 14% / 0.85) 100%);
   }
   
-  .type-trabalho { 
-    @apply border-l-4 border-l-blue-500; 
+  .timeline-card.type-trabalho { 
+    @apply border-l-4 border-l-blue-400/60; 
     background: linear-gradient(135deg, 
-      hsl(220, 50%, 12% / 0.9) 0%, 
-      hsl(220, 30%, 15% / 0.9) 100%);
+      hsl(220, 40%, 12% / 0.85) 0%, 
+      hsl(220, 25%, 14% / 0.85) 100%);
   }
   
-  .type-certificacao { 
-    @apply border-l-4 border-l-yellow-500; 
+  .timeline-card.type-certificacao { 
+    @apply border-l-4 border-l-yellow-400/60; 
     background: linear-gradient(135deg, 
-      hsl(45, 50%, 12% / 0.9) 0%, 
-      hsl(45, 30%, 15% / 0.9) 100%);
+      hsl(45, 40%, 12% / 0.85) 0%, 
+      hsl(45, 25%, 14% / 0.85) 100%);
   }
   
-  .type-projeto { 
-    @apply border-l-4 border-l-green-500; 
+  .timeline-card.type-projeto { 
+    @apply border-l-4 border-l-green-400/60; 
     background: linear-gradient(135deg, 
-      hsl(120, 50%, 12% / 0.9) 0%, 
-      hsl(120, 30%, 15% / 0.9) 100%);
+      hsl(120, 40%, 12% / 0.85) 0%, 
+      hsl(120, 25%, 14% / 0.85) 100%);
   }
   
-  .type-outro { 
-    @apply border-l-4 border-l-gray-500; 
+  .timeline-card.type-outro { 
+    @apply border-l-4 border-l-gray-400/60; 
     background: linear-gradient(135deg, 
-      hsl(0, 0%, 12% / 0.9) 0%, 
-      hsl(0, 0%, 15% / 0.9) 100%);
+      hsl(0, 0%, 12% / 0.85) 0%, 
+      hsl(0, 0%, 14% / 0.85) 100%);
+  }
+
+  /* Hover effects para cada tipo */
+  .timeline-card.type-educacao:hover {
+    @apply border-purple-400/70;
+    box-shadow: 0 15px 30px hsl(0, 0%, 0% / 0.3), 
+                0 0 20px hsl(270, 60%, 50% / 0.15);
+  }
+
+  .timeline-card.type-trabalho:hover {
+    @apply border-blue-400/70;
+    box-shadow: 0 15px 30px hsl(0, 0%, 0% / 0.3), 
+                0 0 20px hsl(220, 60%, 50% / 0.15);
+  }
+
+  .timeline-card.type-certificacao:hover {
+    @apply border-yellow-400/70;
+    box-shadow: 0 15px 30px hsl(0, 0%, 0% / 0.3), 
+                0 0 20px hsl(45, 60%, 50% / 0.15);
+  }
+
+  .timeline-card.type-projeto:hover {
+    @apply border-green-400/70;
+    box-shadow: 0 15px 30px hsl(0, 0%, 0% / 0.3), 
+                0 0 20px hsl(120, 60%, 50% / 0.15);
+  }
+
+  .timeline-card.type-outro:hover {
+    @apply border-gray-400/70;
+    box-shadow: 0 15px 30px hsl(0, 0%, 0% / 0.3), 
+                0 0 20px hsl(0, 0%, 50% / 0.15);
   }
 
   .line-clamp-3 {
