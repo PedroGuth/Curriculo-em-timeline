@@ -43,19 +43,19 @@ const Timeline: React.FC<TimelineProps> = ({ items, onDeleteItem }) => {
   const sortedItems = [...items].sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime());
 
   return (
-    <div className="relative max-w-4xl mx-auto px-4" ref={timelineRef}>
+    <div className="relative max-w-3xl mx-auto px-4" ref={timelineRef}>
       {/* Linha principal do timeline */}
       <div className="absolute left-1/2 transform -translate-x-1/2 w-1 timeline-line h-full"></div>
       
       {sortedItems.map((item, index) => (
-        <div key={item.id} className={`timeline-item relative mb-3 ${index % 2 === 0 ? 'pr-6 text-right' : 'pl-6 text-left'}`}>
+        <div key={item.id} className={`timeline-item relative mb-3 ${index % 2 === 0 ? 'pr-5 text-right' : 'pl-5 text-left'}`}>
           {/* Dot do timeline */}
           <div className={`absolute top-2 ${index % 2 === 0 ? 'right-0' : 'left-0'} transform ${index % 2 === 0 ? 'translate-x-1/2' : '-translate-x-1/2'} timeline-dot flex items-center justify-center text-primary`}>
             {getIcon(item.tipo)}
           </div>
           
           {/* Card do item */}
-          <div className={`timeline-card group relative ${index % 2 === 0 ? 'mr-6' : 'ml-6'} type-${item.tipo}`}>
+          <div className={`timeline-card group relative ${index % 2 === 0 ? 'mr-5' : 'ml-5'} type-${item.tipo}`}>
             <Button
               variant="ghost"
               size="icon"
@@ -65,7 +65,7 @@ const Timeline: React.FC<TimelineProps> = ({ items, onDeleteItem }) => {
               <Trash2 className="w-3 h-3" />
             </Button>
             
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-2">
               {/* Coluna 1: Data e Tipo */}
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
