@@ -1,8 +1,6 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
 import Header from '../components/Header';
 import Timeline from '../components/Timeline';
-import TimelineFilters from '../components/TimelineFilters';
 import AddItemForm from '../components/AddItemForm';
 import { TimelineItem } from '../types/timeline';
 import { Toaster } from '../components/ui/toaster';
@@ -95,15 +93,6 @@ const Index = () => {
         <Header />
         
         <main className="pb-20">
-          <TimelineFilters
-            searchTerm={searchTerm}
-            onSearchChange={setSearchTerm}
-            selectedType={selectedType}
-            onTypeChange={setSelectedType}
-            onClearFilters={handleClearFilters}
-            hasActiveFilters={hasActiveFilters}
-          />
-          
           {filteredItems.length > 0 ? (
             <Timeline items={filteredItems} onDeleteItem={handleDeleteItem} />
           ) : timelineItems.length > 0 ? (
@@ -126,7 +115,16 @@ const Index = () => {
         </main>
       </div>
       
-      <AddItemForm onAddItem={handleAddItem} onDataImport={handleDataImport} />
+      <AddItemForm 
+        onAddItem={handleAddItem} 
+        onDataImport={handleDataImport}
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
+        selectedType={selectedType}
+        onTypeChange={setSelectedType}
+        onClearFilters={handleClearFilters}
+        hasActiveFilters={hasActiveFilters}
+      />
       <Toaster />
     </div>
   );
