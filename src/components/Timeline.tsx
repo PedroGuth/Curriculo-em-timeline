@@ -30,11 +30,11 @@ const Timeline: React.FC<TimelineProps> = ({ items }) => {
 
   const getIcon = (tipo: string) => {
     switch (tipo) {
-      case 'trabalho': return <Briefcase className="w-4 h-4" />;
-      case 'educacao': return <GraduationCap className="w-4 h-4" />;
-      case 'projeto': return <Code className="w-4 h-4" />;
-      case 'certificacao': return <Award className="w-4 h-4" />;
-      default: return <Star className="w-4 h-4" />;
+      case 'trabalho': return <Briefcase className="w-3 h-3" />;
+      case 'educacao': return <GraduationCap className="w-3 h-3" />;
+      case 'projeto': return <Code className="w-3 h-3" />;
+      case 'certificacao': return <Award className="w-3 h-3" />;
+      default: return <Star className="w-3 h-3" />;
     }
   };
 
@@ -46,32 +46,32 @@ const Timeline: React.FC<TimelineProps> = ({ items }) => {
       <div className="absolute left-1/2 transform -translate-x-1/2 w-1 timeline-line h-full"></div>
       
       {sortedItems.map((item, index) => (
-        <div key={item.id} className={`timeline-item relative mb-12 ${index % 2 === 0 ? 'pr-8 text-right' : 'pl-8 text-left'}`}>
+        <div key={item.id} className={`timeline-item relative mb-8 ${index % 2 === 0 ? 'pr-8 text-right' : 'pl-8 text-left'}`}>
           {/* Dot do timeline */}
-          <div className={`absolute top-6 ${index % 2 === 0 ? 'right-0' : 'left-0'} transform ${index % 2 === 0 ? 'translate-x-1/2' : '-translate-x-1/2'} timeline-dot flex items-center justify-center text-primary`}>
+          <div className={`absolute top-4 ${index % 2 === 0 ? 'right-0' : 'left-0'} transform ${index % 2 === 0 ? 'translate-x-1/2' : '-translate-x-1/2'} timeline-dot flex items-center justify-center text-primary`}>
             {getIcon(item.tipo)}
           </div>
           
           {/* Card do item */}
           <div className={`timeline-card ${index % 2 === 0 ? 'mr-8' : 'ml-8'} type-${item.tipo}`}>
             <div className="flex items-center gap-2 mb-2">
-              <Calendar className="w-4 h-4 text-primary" />
-              <span className="text-sm text-muted-foreground font-mono">
+              <Calendar className="w-3 h-3 text-primary" />
+              <span className="text-xs text-muted-foreground font-mono">
                 {new Date(item.data).toLocaleDateString('pt-BR')}
               </span>
             </div>
             
-            <h3 className="text-xl font-bold mb-2 text-foreground">{item.item}</h3>
+            <h3 className="text-lg font-bold mb-2 text-foreground leading-tight">{item.item}</h3>
             
-            <div className="flex items-center gap-2 mb-3">
+            <div className="flex items-center gap-2 mb-2">
               {getIcon(item.tipo)}
-              <span className="text-sm px-2 py-1 rounded-full bg-primary/10 text-primary capitalize">
+              <span className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary capitalize">
                 {item.tipo}
               </span>
             </div>
             
             {item.observacoes && (
-              <p className="text-muted-foreground text-sm leading-relaxed">
+              <p className="text-muted-foreground text-xs leading-relaxed line-clamp-3">
                 {item.observacoes}
               </p>
             )}

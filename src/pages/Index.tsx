@@ -4,6 +4,7 @@ import Header from '../components/Header';
 import Timeline from '../components/Timeline';
 import AddItemForm from '../components/AddItemForm';
 import { TimelineItem } from '../types/timeline';
+import { Toaster } from '../components/ui/toaster';
 
 const Index = () => {
   const [timelineItems, setTimelineItems] = useState<TimelineItem[]>([]);
@@ -51,10 +52,14 @@ const Index = () => {
     setTimelineItems(prev => [item, ...prev]);
   };
 
+  const handleDataImport = (importedItems: TimelineItem[]) => {
+    setTimelineItems(prev => [...importedItems, ...prev]);
+  };
+
   return (
     <div className="min-h-screen">
       <div className="container mx-auto px-4">
-        <Header />
+        <Header onDataImport={handleDataImport} />
         
         <main className="pb-20">
           {timelineItems.length > 0 ? (
@@ -64,7 +69,7 @@ const Index = () => {
               <div className="text-6xl mb-4">📝</div>
               <h2 className="text-2xl font-bold mb-2">Seu timeline está vazio</h2>
               <p className="text-muted-foreground mb-6">
-                Comece adicionando seus primeiros itens profissionais
+                Comece adicionando seus primeiros itens profissionais ou importe um arquivo Excel
               </p>
             </div>
           )}
@@ -72,6 +77,7 @@ const Index = () => {
       </div>
       
       <AddItemForm onAddItem={handleAddItem} />
+      <Toaster />
     </div>
   );
 };
