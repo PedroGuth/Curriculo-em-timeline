@@ -43,14 +43,14 @@ const Timeline: React.FC<TimelineProps> = ({ items, onDeleteItem }) => {
   const sortedItems = [...items].sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime());
 
   return (
-    <div className="relative max-w-4xl mx-auto px-4" ref={timelineRef}>
+    <div className="relative max-w-6xl mx-auto px-4" ref={timelineRef}>
       {/* Linha principal do timeline */}
       <div className="absolute left-1/2 transform -translate-x-1/2 w-1 timeline-line h-full"></div>
       
       {sortedItems.map((item, index) => (
-        <div key={item.id} className={`timeline-item relative mb-6 ${index % 2 === 0 ? 'pr-8 text-right' : 'pl-8 text-left'}`}>
+        <div key={item.id} className={`timeline-item relative mb-4 ${index % 2 === 0 ? 'pr-8 text-right' : 'pl-8 text-left'}`}>
           {/* Dot do timeline */}
-          <div className={`absolute top-3 ${index % 2 === 0 ? 'right-0' : 'left-0'} transform ${index % 2 === 0 ? 'translate-x-1/2' : '-translate-x-1/2'} timeline-dot flex items-center justify-center text-primary`}>
+          <div className={`absolute top-2 ${index % 2 === 0 ? 'right-0' : 'left-0'} transform ${index % 2 === 0 ? 'translate-x-1/2' : '-translate-x-1/2'} timeline-dot flex items-center justify-center text-primary`}>
             {getIcon(item.tipo)}
           </div>
           
@@ -59,33 +59,43 @@ const Timeline: React.FC<TimelineProps> = ({ items, onDeleteItem }) => {
             <Button
               variant="ghost"
               size="icon"
-              className={`absolute top-2 ${index % 2 === 0 ? 'left-2' : 'right-2'} h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity bg-destructive/10 hover:bg-destructive/20 text-destructive`}
+              className={`absolute top-2 ${index % 2 === 0 ? 'left-2' : 'right-2'} h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-destructive/10 hover:bg-destructive/20 text-destructive`}
               onClick={() => onDeleteItem(item.id)}
             >
               <Trash2 className="w-3 h-3" />
             </Button>
             
-            <div className="flex items-center gap-2 mb-2">
-              <Calendar className="w-3 h-3 text-primary" />
-              <span className="text-xs text-muted-foreground font-mono">
-                {new Date(item.data).toLocaleDateString('pt-BR')}
-              </span>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {/* Coluna 1: Data e Tipo */}
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-3 h-3 text-primary" />
+                  <span className="text-xs text-muted-foreground font-mono">
+                    {new Date(item.data).toLocaleDateString('pt-BR')}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  {getIcon(item.tipo)}
+                  <span className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary capitalize">
+                    {item.tipo}
+                  </span>
+                </div>
+              </div>
+              
+              {/* Coluna 2: Título */}
+              <div className="md:col-span-1">
+                <h3 className="text-sm font-bold text-foreground leading-tight">{item.item}</h3>
+              </div>
+              
+              {/* Coluna 3: Observações */}
+              <div className="md:col-span-1">
+                {item.observacoes && (
+                  <p className="text-muted-foreground text-xs leading-relaxed line-clamp-2">
+                    {item.observacoes}
+                  </p>
+                )}
+              </div>
             </div>
-            
-            <h3 className="text-base font-bold mb-2 text-foreground leading-tight">{item.item}</h3>
-            
-            <div className="flex items-center gap-2 mb-2">
-              {getIcon(item.tipo)}
-              <span className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary capitalize">
-                {item.tipo}
-              </span>
-            </div>
-            
-            {item.observacoes && (
-              <p className="text-muted-foreground text-xs leading-relaxed line-clamp-2">
-                {item.observacoes}
-              </p>
-            )}
           </div>
         </div>
       ))}

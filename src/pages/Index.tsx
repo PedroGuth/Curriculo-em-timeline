@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState, useEffect, useMemo } from 'react';
 import Header from '../components/Header';
 import Timeline from '../components/Timeline';
+import TimelineFilters from '../components/TimelineFilters';
 import AddItemForm from '../components/AddItemForm';
 import { TimelineItem } from '../types/timeline';
 import { Toaster } from '../components/ui/toaster';
@@ -8,6 +10,8 @@ import { useToast } from '../components/ui/use-toast';
 
 const Index = () => {
   const [timelineItems, setTimelineItems] = useState<TimelineItem[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedType, setSelectedType] = useState('all');
   const { toast } = useToast();
 
   // Dados iniciais de exemplo
@@ -45,6 +49,19 @@ const Index = () => {
     setTimelineItems(initialItems);
   }, []);
 
+  // Filtrar itens baseado na busca e tipo
+  const filteredItems = useMemo(() => {
+    return timelineItems.filter(item => {
+      const matchesSearch = searchTerm === '' || 
+        item.item.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.observacoes.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      const matchesType = selectedType === 'all' || item.tipo === selectedType;
+      
+      return matchesSearch && matchesType;
+    });
+  }, [timelineItems, searchTerm, selectedType]);
+
   const handleAddItem = (newItem: Omit<TimelineItem, 'id'>) => {
     const item: TimelineItem = {
       ...newItem,
@@ -65,14 +82,38 @@ const Index = () => {
     setTimelineItems(prev => [...importedItems, ...prev]);
   };
 
+  const handleClearFilters = () => {
+    setSearchTerm('');
+    setSelectedType('all');
+  };
+
+  const hasActiveFilters = searchTerm !== '' || selectedType !== 'all';
+
   return (
     <div className="min-h-screen">
       <div className="container mx-auto px-4">
         <Header />
         
         <main className="pb-20">
-          {timelineItems.length > 0 ? (
-            <Timeline items={timelineItems} onDeleteItem={handleDeleteItem} />
+          <TimelineFilters
+            searchTerm={searchTerm}
+            onSearchChange={setSearchTerm}
+            selectedType={selectedType}
+            onTypeChange={setSelectedType}
+            onClearFilters={handleClearFilters}
+            hasActiveFilters={hasActiveFilters}
+          />
+          
+          {filteredItems.length > 0 ? (
+            <Timeline items={filteredItems} onDeleteItem={handleDeleteItem} />
+          ) : timelineItems.length > 0 ? (
+            <div className="text-center py-20">
+              <div className="text-6xl mb-4">🔍</div>
+              <h2 className="text-2xl font-bold mb-2">Nenhum item encontrado</h2>
+              <p className="text-muted-foreground mb-6">
+                Tente ajustar os filtros ou termo de busca
+              </p>
+            </div>
           ) : (
             <div className="text-center py-20">
               <div className="text-6xl mb-4">📝</div>
