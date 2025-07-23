@@ -1,3 +1,4 @@
+
 import React, { useRef } from 'react';
 import { Upload, FileSpreadsheet } from 'lucide-react';
 import * as XLSX from 'xlsx';
@@ -26,50 +27,140 @@ const ExcelUpload: React.FC<ExcelUploadProps> = ({ onDataImport }) => {
         const worksheet = workbook.Sheets[sheetName];
         const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
-        const timelineItems: TimelineItem[] = jsonData.map((row: any, index) => {
-          // Mapear colunas possíveis (português e inglês)
-          const data = row['Data'] || row['Date'] || row['data'] || row['date'] || '';
-          const item = row['Item'] || row['item'] || row['Título'] || row['Title'] || '';
-          const tipo = row['Tipo'] || row['Type'] || row['tipo'] || row['type'] || 'outro';
-          const observacoes = row['Observações'] || row['Observacoes'] || row['Notes'] || row['observacoes'] || row['notes'] || '';
+        console.log('Dados brutos do Excel:', jsonData);
 
-          // Normalizar tipo
-          const tipoNormalizado = tipo.toLowerCase();
+        const timelineItems: TimelineItem[] = jsonData.map((row: any, index) => {
+          console.log('Processando linha:', row);
+          
+          // Mapear colunas possíveis (português e inglês) - case insensitive
+          const keys = Object.keys(row);
+          
+          const dataKey = keys.find(key => 
+            key.toLowerCase().includes('data') || 
+            key.toLowerCase().includes('date')
+          );
+          
+          const itemKey = keys.find(key => 
+            key.toLowerCase().includes('item') || 
+            key.toLowerCase().includes('título') || 
+            key.toLowerCase().includes('titulo') || 
+            key.toLowerCase().includes('title') ||
+            key.toLowerCase().includes('nome') ||
+            key.toLowerCase().includes('name')
+          );
+          
+          const tipoKey = keys.find(key => 
+            key.toLowerCase().includes('tipo') || 
+            key.toLowerCase().includes('type') ||
+            key.toLowerCase().includes('categoria') ||
+            key.toLowerCase().includes('category')
+          );
+          
+          const observacoesKey = keys.find(key => 
+            key.toLowerCase().includes('observaç') || 
+            key.toLowerCase().includes('observac') || 
+            key.toLowerCase().includes('notes') || 
+            key.toLowerCase().includes('note') ||
+            key.toLowerCase().includes('descrição') ||
+            key.toLowerCase().includes('descricao') ||
+            key.toLowerCase().includes('description')
+          );
+
+          const data = dataKey ? row[dataKey] : '';
+          const item = itemKey ? row[itemKey] : '';
+          const tipo = tipoKey ? row[tipoKey] : '';
+          const observacoes = observacoesKey ? row[observacoesKey] : '';
+
+          console.log('Valores extraídos:', { data, item, tipo, observacoes });
+
+          // Normalizar tipo de forma mais precisa
+          const tipoNormalizado = String(tipo).toLowerCase().trim();
           let tipoFinal: 'trabalho' | 'educacao' | 'projeto' | 'certificacao' | 'outro' = 'outro';
           
-          if (tipoNormalizado.includes('trabalho') || tipoNormalizado.includes('work') || tipoNormalizado.includes('job')) {
+          if (tipoNormalizado.includes('trabalho') || 
+              tipoNormalizado.includes('work') || 
+              tipoNormalizado.includes('job') ||
+              tipoNormalizado.includes('experiência') ||
+              tipoNormalizado.includes('experiencia') ||
+              tipoNormalizado.includes('experience') ||
+              tipoNormalizado.includes('profissional')) {
             tipoFinal = 'trabalho';
-          } else if (tipoNormalizado.includes('educacao') || tipoNormalizado.includes('education') || tipoNormalizado.includes('escola') || tipoNormalizado.includes('university')) {
+          } else if (tipoNormalizado.includes('educacao') || 
+                     tipoNormalizado.includes('educação') ||
+                     tipoNormalizado.includes('education') || 
+                     tipoNormalizado.includes('escola') || 
+                     tipoNormalizado.includes('university') ||
+                     tipoNormalizado.includes('universidade') ||
+                     tipoNormalizado.includes('formação') ||
+                     tipoNormalizado.includes('formacao') ||
+                     tipoNormalizado.includes('acadêmica') ||
+                     tipoNormalizado.includes('academica')) {
             tipoFinal = 'educacao';
-          } else if (tipoNormalizado.includes('projeto') || tipoNormalizado.includes('project')) {
+          } else if (tipoNormalizado.includes('projeto') || 
+                     tipoNormalizado.includes('project') ||
+                     tipoNormalizado.includes('realização') ||
+                     tipoNormalizado.includes('realizacao')) {
             tipoFinal = 'projeto';
-          } else if (tipoNormalizado.includes('certificacao') || tipoNormalizado.includes('certification') || tipoNormalizado.includes('certificate')) {
+          } else if (tipoNormalizado.includes('certificacao') || 
+                     tipoNormalizado.includes('certificação') ||
+                     tipoNormalizado.includes('certification') || 
+                     tipoNormalizado.includes('certificate') ||
+                     tipoNormalizado.includes('certific')) {
             tipoFinal = 'certificacao';
           }
 
-          // Converter data para formato ISO
+          console.log('Tipo normalizado:', tipoNormalizado, '-> Tipo final:', tipoFinal);
+
+          // Converter data do Excel para formato ISO
           let dataFormatada = '';
           if (data) {
             try {
-              const dateObj = new Date(data);
-              if (!isNaN(dateObj.getTime())) {
-                dataFormatada = dateObj.toISOString().split('T')[0];
+              // Se for um número (data do Excel)
+              if (typeof data === 'number') {
+                // Excel usa dias desde 1/1/1900
+                const excelDate = new Date((data - 25569) * 86400 * 1000);
+                dataFormatada = excelDate.toISOString().split('T')[0];
               } else {
-                dataFormatada = new Date().toISOString().split('T')[0];
+                // Se for string, tentar converter
+                const dateObj = new Date(data);
+                if (!isNaN(dateObj.getTime())) {
+                  dataFormatada = dateObj.toISOString().split('T')[0];
+                } else {
+                  // Tentar formatos brasileiros dd/mm/yyyy
+                  const parts = String(data).split('/');
+                  if (parts.length === 3) {
+                    const day = parseInt(parts[0]);
+                    const month = parseInt(parts[1]) - 1; // Mês começa em 0
+                    const year = parseInt(parts[2]);
+                    const brDate = new Date(year, month, day);
+                    if (!isNaN(brDate.getTime())) {
+                      dataFormatada = brDate.toISOString().split('T')[0];
+                    }
+                  }
+                }
               }
-            } catch {
+            } catch (error) {
+              console.error('Erro ao converter data:', error);
               dataFormatada = new Date().toISOString().split('T')[0];
             }
           }
 
+          if (!dataFormatada) {
+            dataFormatada = new Date().toISOString().split('T')[0];
+          }
+
+          console.log('Data formatada:', dataFormatada);
+
           return {
             id: `imported-${Date.now()}-${index}`,
             data: dataFormatada,
-            item: item.toString(),
+            item: String(item),
             tipo: tipoFinal,
-            observacoes: observacoes.toString()
+            observacoes: String(observacoes)
           };
-        }).filter(item => item.item); // Filtrar apenas itens com título
+        }).filter(item => item.item && item.item.trim() !== ''); // Filtrar apenas itens com título
+
+        console.log('Itens finais:', timelineItems);
 
         if (timelineItems.length > 0) {
           onDataImport(timelineItems);
@@ -80,7 +171,7 @@ const ExcelUpload: React.FC<ExcelUploadProps> = ({ onDataImport }) => {
         } else {
           toast({
             title: "Nenhum item encontrado",
-            description: "Verifique se o arquivo possui as colunas: Data, Item, Tipo, Observações",
+            description: "Verifique se o arquivo possui as colunas necessárias com dados válidos",
             variant: "destructive",
           });
         }
